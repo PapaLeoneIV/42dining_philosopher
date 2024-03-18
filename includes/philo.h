@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:11 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/18 11:53:57 by rileone          ###   ########.fr       */
+/*   Updated: 2024/03/18 11:55:53 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ typedef struct s_philo
     int time_to_eat;
     int time_to_sleep;
     int time_must_eat;
-    long int timestamp;
 } t_philo;
 
 

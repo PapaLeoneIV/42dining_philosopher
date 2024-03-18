@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/18 11:53:48 by rileone          ###   ########.fr       */
+/*   Updated: 2024/03/18 11:55:30 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int main(int argc, char **argv)
     var = (t_philo){0};
     if (argc < 5 || argc > 6)
         return (0);
-    ft_init_var(&var, argv);
+    if (ft_init_var(&var, argv) != 1)
+        return (0);
     return (0);
 }
