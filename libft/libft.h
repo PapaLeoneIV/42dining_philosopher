@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/18 11:51:11 by rileone          ###   ########.fr       */
+/*   Updated: 2024/03/19 15:18:48 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+# include <pthread.h>
+# include <sys/time.h>
 
 typedef struct s_lis_var
 {
@@ -71,6 +73,16 @@ typedef enum e_state
 	FAILURE,
 	CONTINUE,
 }	t_state;
+
+/**
+ * @brief function used to return the current time in milliseconds
+ * 
+ * @param  -does not take any params;
+ * 
+ * @return -1 if there was an error, or the current time in milliseconds, 
+ * 			in a long data type;
+ */
+long ft_get_time_msec(void);
 
 /**
  * @brief Counts the columns of a given matrix.
