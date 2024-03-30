@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:11 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/29 18:56:06 by rileone          ###   ########.fr       */
+/*   Updated: 2024/03/30 18:05:43 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 typedef struct s_waiter
 {
     int numero_di_cicli;
-    long start_time;
+    long start_time; 
     long end_time;
     int philos_alive;  //keeps track of the state of the philos;
 } t_waiter;
@@ -42,6 +42,7 @@ typedef struct s_philo
     long end_eat;
     long start_sleep;
     long end_sleep;
+
 
     pthread_mutex_t stampa;
     pthread_mutex_t lfork;
@@ -61,6 +62,9 @@ typedef struct s_stanza //contiene le regole del gioco e tutte le info del tavol
     t_philo *philos;
     t_waiter waiter;       //he is going to be the observer of the dinner;
     
+
+    pthread_t pthread_id;
+    pthread_t wthread_id;
     pthread_mutex_t stampa;
     pthread_mutex_t mangia;
     pthread_mutex_t morte;
@@ -70,5 +74,7 @@ typedef struct s_stanza //contiene le regole del gioco e tutte le info del tavol
 
 
 int ft_init_room(t_room *var, int argc,  char **argv);
+int check_valid_args(char **argv, int argc);
+
 
 #endif

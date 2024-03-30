@@ -6,7 +6,7 @@
 #    By: rileone <rileone@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/16 15:17:14 by rileone           #+#    #+#              #
-#    Updated: 2024/03/20 20:10:05 by rileone          ###   ########.fr        #
+#    Updated: 2024/03/30 17:06:58 by rileone          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ COMPILE = $(CC) $(CFLAGS)
 ARCHIVE = ar rcs
 
 SRC =	$(addprefix $(SRCDIR)/, main.c) \
-		$(addprefix $(HELPERS)/, ft_init_room.c) \
+		$(addprefix $(HELPERS)/, ft_init_room.c check_valid_args.c) \
 
 
 OBJ = ${SRC:.c=.o}

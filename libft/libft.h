@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/19 15:18:48 by rileone          ###   ########.fr       */
+/*   Updated: 2024/03/30 19:59:56 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,16 @@ typedef enum e_state
 	FAILURE,
 	CONTINUE,
 }	t_state;
+/**
+ * @brief function used to sleep for sleep_time milliseconds
+ * 
+ * @param  -does not take any params;
+ * 
+ * @return returns after sleep_time milliseconds
+ */
+
+void    custom_sleep(int sleep_time);
+
 
 /**
  * @brief function used to return the current time in milliseconds

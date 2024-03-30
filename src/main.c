@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/29 19:03:38 by rileone          ###   ########.fr       */
+/*   Updated: 2024/03/30 20:11:19 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,47 +52,69 @@
     
 } */
 
-void *routine(void *room)
+void *philoroutine(void *philo)
 {
-    t_room staz = *(t_room*)room;
-    pthread_mutex_lock(&staz.stampa);
-    write(2, "abcdef12345abcdef12345abcdef12345abcdef12345abcdef12345abcdef12345abcdef12345abcdef12345\n", 89);
-    pthread_mutex_unlock(&staz.stampa);
-    (void )staz;
+    void *retval;
+    t_philo *filos = (t_philo*)philo;
+    
+    if (filos == NULL)
+        pthread_exit(&retval);
+    while(1)
+    {
+        ft_putnbr((int)ft_get_time_msec());
+        custom_sleep(500);
+    }
+    /**
+     * CONTROLLI DA FARE :
+     * 
+     * controllare che il philo sia diverso da NULL
+     * 
+     * //in un loop infinito devono :
+     * 
+     * -mangiare
+     *      (check sulle forks)
+     *      (sleep_di(time_to_eat)time)
+     *      (stampa X sta mangiando)
+     * -pensare
+     *      (sleep_di(time_to_think)time)
+     *      (stampa X sta pensando)
+     * -dormire
+     *      (sleep_di(time_to_sleep)time)
+     *      (stampa X sta dormendo)    
+     * 
+    */
+
+    
+    
+    
+    
+    
     return NULL;
 }
 
-static int check_valid_args(int argc, char **argv)
+/* void *waiter_routine(t_room room)
 {
-    int i;    
+    
+    return NULL;
+} */
 
-    i = 1;
-    if (argc < 5 || argc > 6)
-        return (0);
-    while (i < argc)
-    {
-        if(argv[i] && (!ft_isnumber(argv[i]) || ft_atoi(argv[i]) <= 0))
-			return (0);
-		i++;
-    }
-    return (1);
-}
+
 
 int main(int argc, char **argv)
 {
     t_room tab;
-    pthread_t thread_id;
     int     n_philo;
 
     tab = (t_room){0};
     n_philo = 0;
-    if (ft_init_room(&tab, argc, argv) != 1 || check_valid_args(argc, argv) != 1)
+    if (check_valid_args(argv, argc) != 1 || ft_init_room(&tab, argc, argv) != 1 )
         return (0);
     while(n_philo < tab.n_philos)
     {
-        pthread_create(&thread_id, NULL, routine, (void * )&tab);
+        pthread_create(&tab.pthread_id, NULL, philoroutine, (void * )&tab.philos[n_philo]);
         n_philo++;
     }
+ /*    pthread_create(&tab.wthread_id, NULL, NULL, NULL); */
     return (0);
 }
 
