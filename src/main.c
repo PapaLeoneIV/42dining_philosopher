@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/30 20:11:19 by rileone          ###   ########.fr       */
+/*   Updated: 2024/03/30 20:14:05 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ void *philoroutine(void *philo)
         pthread_exit(&retval);
     while(1)
     {
+        /**cercavo di usare gdb per capire perche non stampava
+         * penso che saltasse da trhead a thread quando premevo next
+         * 
+        */
         ft_putnbr((int)ft_get_time_msec());
         custom_sleep(500);
     }
