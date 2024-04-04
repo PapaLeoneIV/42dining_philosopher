@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: rileone <riccardo.leone@student.42fir      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/13 19:44:25 by rileone           #+#    #+#             */
-/*   Updated: 2024/02/01 15:51:53 by rileone          ###   ########.fr       */
+/*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
+/*   Updated: 2024/04/02 15:23:18 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 int	ft_strncmp(char *s1, char *s2, unsigned int n)

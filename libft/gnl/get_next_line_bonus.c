@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rileone <riccardo.leone@student.42fir      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 19:03:43 by rileone           #+#    #+#             */
-/*   Updated: 2023/11/17 19:03:51 by rileone          ###   ########.fr       */
+/*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
+/*   Updated: 2024/04/02 15:23:17 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line_bonus.h"
 
 char	*return_last_line(char **buffer)

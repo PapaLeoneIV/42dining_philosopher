@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/30 19:59:56 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/04 14:07:51 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef enum e_state
  * @return returns after sleep_time milliseconds
  */
 
-void    custom_sleep(int sleep_time);
+void    custom_sleep(long int sleep_time);
 
 
 /**

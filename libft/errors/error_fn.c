@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   error_fn.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rileone <riccardo.leone@student.42fir      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 15:50:54 by rileone           #+#    #+#             */
-/*   Updated: 2024/03/10 16:36:40 by rileone          ###   ########.fr       */
+/*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
+/*   Updated: 2024/04/02 15:23:17 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "libft.h"
 
