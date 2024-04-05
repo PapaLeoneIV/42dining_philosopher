@@ -6,28 +6,28 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 10:27:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/04 13:28:12 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/05 10:58:09 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/philo.h"
 
-void ft_assign_forks(t_room *room, t_philo *philo, int counter)
+void ft_assign_forks(t_room *room, t_philo *philo)
 {
-    if (counter == 0)
+    if (philo->id == 1)
     {
-        philo->rfork = &room->forks[0];
-        philo->lfork = &room->forks[counter + 1];    
+        philo->rfork = &room->forks[room->n_philos - 1];
+        philo->lfork = &room->forks[0];    
     }
-    else if (counter == room->n_philos - 1)
+    else if (philo->id == room->n_philos)
     {
-        philo->lfork = &room->forks[0];
-        philo->rfork = &room->forks[room->n_philos - 1];    
+        philo->rfork = &room->forks[room->n_philos - 1];
+        philo->lfork = &room->forks[room->n_philos - 2];    
     }
     else 
     {
-        philo->lfork = &room->forks[counter];
-        philo->rfork = &room->forks[counter + 1];
+        philo->lfork = &room->forks[philo->id - 1];
+        philo->rfork = &room->forks[philo->id - 2];
     }
     
 }
@@ -53,7 +53,7 @@ static int prepare_philos(t_room *room)
         room->philos[i].time_must_eat = room->time_must_eat;
         room->philos[i].n_philos_tot = room->n_philos;
         room->philos[i].stanza = room;
-        ft_assign_forks(room, &room->philos[i], i);     
+        ft_assign_forks(room, &room->philos[i]);     
         pthread_mutex_init(&room->philos[i].stampa, NULL);
         pthread_mutex_init(&room->philos[i].morte, NULL);
         pthread_mutex_init(&room->philos[i].mangia, NULL);

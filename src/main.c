@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/04 14:07:12 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/05 11:00:52 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@
 
 void ft_send_message(t_philo *philo, int flag)
 {
-    pthread_mutex_lock(&philo->stampa);
     if (philo->is_alive)
     {
         if(flag == FORKS)
@@ -67,7 +66,7 @@ void ft_send_message(t_philo *philo, int flag)
         if(flag == EAT)
             printf("%ld %i is eating\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
     }
-    pthread_mutex_unlock(&philo->stampa);
+
 }
 
 void ft_take_forks(t_philo *philo)
@@ -97,15 +96,14 @@ void ft_is_eating(t_philo *philo)
     philo->start_eat = ft_get_time_msec();
     
     //scrive i messaggi
+    custom_sleep(philo->time_to_eat);
     ft_send_message(philo, EAT);
     
     //passa il tempo prestabilito
-    
-    
+
     //sblocco le forchette
     pthread_mutex_unlock(philo->rfork);
     pthread_mutex_unlock(philo->lfork);
-    custom_sleep(philo->time_to_eat * 1000);
     //timestamp fine pranzo 
     philo->end_eat = ft_get_time_msec();
 }
@@ -131,8 +129,6 @@ void *philoroutine(void *arg)
         ft_is_thinking(philo);       
         philo->time_must_eat--;
     }
-
-
     return (NULL);
 }
 
