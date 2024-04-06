@@ -73,6 +73,8 @@ static int address_dining_room(t_room *room, int argc, char **argv)
     room->pthread_id = ft_calloc(room->n_philos, sizeof(pthread_t));
     if (argc == 6)
         room->time_must_eat = ft_atoi(argv[5]);
+    else                                                //controllo sul 5' argomento
+        room->time_must_eat = -1;
     room->forks = ft_calloc(room->n_philos, sizeof(pthread_mutex_t));
     while(++i < room->n_philos)
         pthread_mutex_init((room->forks + i), NULL);

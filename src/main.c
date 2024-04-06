@@ -45,26 +45,30 @@
         ft_printf("tab->philos->time_must_eat : %i\n",tab->philos[i].time_must_eat);
     }
     ft_printf("WAITER STATS\n");
-    ft_printf("numero di cicli %i\n", tab->waiter.numero_di_cicli);
+    ft_printf("numero di cicli %i\n", tab->waiter.numero_di_c
+    ft_printf("take_forks\n");icli);
     ft_printf("start->time %i\n", tab->waiter.start_time);
     ft_printf("they are alive %i\n", tab->waiter.philos_alive);
 
 } */
 
-void ft_send_message(t_philo *philo, int flag)
+static void ft_send_message(const t_philo *philo, int flag)
 {
     if (philo->is_alive)
     {
         if(flag == FORKS)
-            printf("%ld %i has taken a fork\n",ft_get_time_msec() - philo->stanza->start_time, philo->id);
+        {
+            printf("%ld %i \033[32mhas taken the right fork\033[0m\n",ft_get_time_msec() - philo->stanza->start_time, philo->id);
+            printf("%ld %i \033[33mhas taken the left fork\033[0m\n",ft_get_time_msec() - philo->stanza->start_time, philo->id);
+        }
         if(flag == DIED)
-            printf("%ld %i has died\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
+            printf("\033[1;31m%ld %i has died\033[0m\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
         if(flag == SLEEP)
-            printf("%ld %i is sleeping\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
+            printf("%ld %i \033[34mis sleeping\033[0m\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
         if(flag == THINK)
-            printf("%ld %i has taken a fork\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
+            printf("%ld %i is thinking\033[0m\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
         if(flag == EAT)
-            printf("%ld %i is eating\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
+            printf("%ld %i \033[35mis eating\n\033[0m",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
     }
 
 }
@@ -74,15 +78,13 @@ void ft_take_forks(t_philo *philo)
     if (philo->id == philo->n_philos_tot)
     {
         pthread_mutex_lock(philo->rfork);
-        ft_send_message(philo, FORKS);
         pthread_mutex_lock(philo->lfork);
         ft_send_message(philo, FORKS);
     }
     else
     {
         pthread_mutex_lock(philo->lfork);
-        ft_send_message(philo, FORKS);
-        pthread_mutex_lock(philo->rfork) ;
+        pthread_mutex_lock(philo->rfork);
         ft_send_message(philo, FORKS);
     }
 }
@@ -96,14 +98,15 @@ void ft_is_eating(t_philo *philo)
     philo->start_eat = ft_get_time_msec();
     
     //scrive i messaggi
-    custom_sleep(philo->time_to_eat);
-    ft_send_message(philo, EAT);
+    ft_send_message(philo, EAT);                                    //manda prima il messaggio poi mangia (non è un errore ma torna meglio)
     
     //passa il tempo prestabilito
+    custom_sleep(philo->time_to_eat);
 
     //sblocco le forchette
     pthread_mutex_unlock(philo->rfork);
     pthread_mutex_unlock(philo->lfork);
+
     //timestamp fine pranzo 
     philo->end_eat = ft_get_time_msec();
 }
@@ -126,7 +129,7 @@ void *philoroutine(void *arg)
     {
         ft_is_eating(philo);
         ft_is_sleeping(philo);
-        ft_is_thinking(philo);       
+        ft_is_thinking(philo);
         philo->time_must_eat--;
     }
     return (NULL);
@@ -163,8 +166,9 @@ int main(int argc, char **argv)
     
     tab = ft_calloc(1, sizeof(t_room));
     i = -1;
-    if (check_valid_args(argv, argc) != 1 || ft_init_room(tab, argc, argv) != 1)
-        return (0);
+    if (check_valid_args(argv, argc) != 1 || ft_init_room(tab, argc, argv) != 1) {
+        return (1);
+    }
     while (++i < tab->n_philos)
     {
         tab->philos[i].creation_time = tab->start_time - ft_get_time_msec();
