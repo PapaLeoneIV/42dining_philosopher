@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 10:27:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/05 10:58:09 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/08 14:51:46 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,8 @@ static int prepare_philos(t_room *room)
         room->philos[i].n_philos_tot = room->n_philos;
         room->philos[i].stanza = room;
         ft_assign_forks(room, &room->philos[i]);     
-        pthread_mutex_init(&room->philos[i].stampa, NULL);
-        pthread_mutex_init(&room->philos[i].morte, NULL);
-        pthread_mutex_init(&room->philos[i].mangia, NULL);
+        pthread_mutex_init(&room->philos[i].lock, NULL);
+        
     }
     return (1);
 }
@@ -77,7 +76,9 @@ static int address_dining_room(t_room *room, int argc, char **argv)
         room->time_must_eat = -1;
     room->forks = ft_calloc(room->n_philos, sizeof(pthread_mutex_t));
     while(++i < room->n_philos)
-        pthread_mutex_init((room->forks + i), NULL);
+        pthread_mutex_init(&(room->forks[i]), NULL);
+    pthread_mutex_init(&room->stampa, NULL);
+    pthread_mutex_init(&room->bigb, NULL);
     room->start_time = ft_get_time_msec();
     return (1);
 }

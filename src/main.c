@@ -6,176 +6,120 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/05 11:00:52 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/08 17:21:16 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- *
- * argomenti:
- * number_of_philosophers
- * time_to_die
- * time_to_eat
- * time_to_sleep
- * [number_of_times_each_philosopher_must_eat]
- */
 
 #include "../includes/philo.h"
 
-/* void ft_print_stats(t_room *tab, char **argv)
+static void ft_send_message(t_philo *philo, int flag)
 {
-    int i;
-
-    i = -1;
-    ft_printf("Room Stats: \n");
-    ft_printf("tab->n_philos : %i\n",tab->n_philos);
-    ft_printf("tab->time_to_die : %i\n",tab->time_to_die);
-    ft_printf("tab->time_to_eat : %i\n",tab->time_to_eat);
-    ft_printf("tab->time_to_sleep : %i\n",tab->time_to_sleep);
-    ft_printf("tab->time_must_eat : %i\n",tab->time_must_eat);
-    ft_printf("---------\n");
-    while(++i < ft_atoi(argv[1]))
-    {
-        ft_printf("STATISTIC OF PHILO N [%i]\n", i);
-        ft_printf("tab->philosID : %i\n",tab->philos[i].id);
-        ft_printf("tab->philos->isalive %i\n", tab->philos[i].is_alive);
-        ft_printf("tab->philos->time_to_die : %i\n",tab->philos[i].time_to_die);
-        ft_printf("tab->philos->time_to_eat : %i\n",tab->philos[i].time_to_eat);
-        ft_printf("tab->philos->time_to_sleep : %i\n",tab->philos[i].time_to_sleep);
-        ft_printf("tab->philos->time_must_eat : %i\n",tab->philos[i].time_must_eat);
-    }
-    ft_printf("WAITER STATS\n");
-    ft_printf("numero di cicli %i\n", tab->waiter.numero_di_c
-    ft_printf("take_forks\n");icli);
-    ft_printf("start->time %i\n", tab->waiter.start_time);
-    ft_printf("they are alive %i\n", tab->waiter.philos_alive);
-
-} */
-
-static void ft_send_message(const t_philo *philo, int flag)
-{
-    if (philo->is_alive)
-    {
-        if(flag == FORKS)
-        {
-            printf("%ld %i \033[32mhas taken the right fork\033[0m\n",ft_get_time_msec() - philo->stanza->start_time, philo->id);
-            printf("%ld %i \033[33mhas taken the left fork\033[0m\n",ft_get_time_msec() - philo->stanza->start_time, philo->id);
-        }
-        if(flag == DIED)
-            printf("\033[1;31m%ld %i has died\033[0m\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
-        if(flag == SLEEP)
-            printf("%ld %i \033[34mis sleeping\033[0m\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
-        if(flag == THINK)
-            printf("%ld %i is thinking\033[0m\n",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
-        if(flag == EAT)
-            printf("%ld %i \033[35mis eating\n\033[0m",  ft_get_time_msec() - philo->stanza->start_time, philo->id);
-    }
-
+	pthread_mutex_lock(&philo->stanza->stampa);
+	long timestamp = ft_get_time_msec() - philo->stanza->start_time;
+	if (philo->is_alive)
+	{
+		if (flag == FORKS)
+			printf("%ld %i \033[32mhas taken the fork\033[0m\n",timestamp, philo->id);
+		else if (flag == DIED)
+			printf("\033 [%ld %i has died\033[0m\n",  timestamp, philo->id);
+		else if (flag == SLEEP)
+			printf("%ld %i \033[34mis sleeping\033[0m\n",  timestamp, philo->id);
+		else if (flag == THINK)
+			printf("%ld %i is thinking\033[0m\n",  timestamp, philo->id);
+		else if (flag == EAT)
+			printf("%ld %i \033[35mis eating\n\033[0m\n",  timestamp, philo->id);
+	}
+	pthread_mutex_unlock(&philo->stanza->stampa);
 }
 
 void ft_take_forks(t_philo *philo)
 {
-    if (philo->id == philo->n_philos_tot)
-    {
-        pthread_mutex_lock(philo->rfork);
-        pthread_mutex_lock(philo->lfork);
-        ft_send_message(philo, FORKS);
-    }
-    else
-    {
-        pthread_mutex_lock(philo->lfork);
-        pthread_mutex_lock(philo->rfork);
-        ft_send_message(philo, FORKS);
-    }
+		pthread_mutex_lock(philo->rfork);
+		ft_send_message(philo, FORKS);
+		pthread_mutex_lock(philo->lfork);
+		ft_send_message(philo, FORKS);
+
 }
 
 void ft_is_eating(t_philo *philo)
 {
-    //prende le forkette
-    ft_take_forks(philo);
-    
-    //timestamp inizio pranzo 
-    philo->start_eat = ft_get_time_msec();
-    
-    //scrive i messaggi
-    ft_send_message(philo, EAT);                                    //manda prima il messaggio poi mangia (non è un errore ma torna meglio)
-    
-    //passa il tempo prestabilito
-    custom_sleep(philo->time_to_eat);
-
-    //sblocco le forchette
-    pthread_mutex_unlock(philo->rfork);
-    pthread_mutex_unlock(philo->lfork);
-
-    //timestamp fine pranzo 
-    philo->end_eat = ft_get_time_msec();
-}
-
-void ft_is_sleeping(t_philo *philo)
-{
-    ft_send_message(philo, SLEEP);
-    custom_sleep(philo->time_to_sleep);
-}
-
-void ft_is_thinking(t_philo *philo)
-{
-    ft_send_message(philo, THINK);
+	
+	ft_take_forks(philo);
+	pthread_mutex_lock(&philo->lock);
+	philo->start_eat = ft_get_time_msec();
+	ft_send_message(philo, EAT);                           
+	custom_sleep(philo->time_to_eat);
+	pthread_mutex_unlock(philo->lfork);
+	pthread_mutex_unlock(philo->rfork);
+	philo->end_eat = ft_get_time_msec();
+	pthread_mutex_unlock(&philo->lock);
 }
 
 void *philoroutine(void *arg)
 {
-    t_philo *philo = (t_philo *)arg;
-    while(philo->is_alive && philo->time_must_eat != 0)
-    {
-        ft_is_eating(philo);
-        ft_is_sleeping(philo);
-        ft_is_thinking(philo);
-        philo->time_must_eat--;
-    }
-    return (NULL);
+	t_philo *philo = (t_philo *)arg;
+	while(philo->is_alive && philo->time_must_eat != 0)
+	{
+		ft_is_eating(philo);
+		ft_send_message(philo, SLEEP);
+		custom_sleep(philo->time_to_sleep);
+		ft_send_message(philo, THINK);
+		philo->time_must_eat--;
+	}
+	return (NULL);
 }
 
-/* void *waiter_routine(t_room room)
+int check_death(t_room *stanza)
 {
+	int i;
 
-    return NULL;
+	i = 0;
+	
+	while(i < stanza->n_philos)
+	{
+		
+		if(stanza->philos[i].end_eat - stanza->philos[i].start_eat > stanza->philos[i].time_to_die)
+		{
+			/**stampa la morte del filosofo*/
+			ft_send_message(&stanza->philos[i], DIED);
+			/**interrmpi esecuzione*/
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+/* 
+void bigbrother(t_room * room)
+{
+	pthread_mutex_lock(&room->stampa);
+	if (check_death(room) == 0)
+	{
+		pthread_mutex_unlock(&room->stampa);	
+		return;
+	}
+	pthread_mutex_unlock(&room->stampa);
 } */
-    /**
-     * CONTROLLI DA FARE :
-     *
-     * controllare che il philo sia diverso da NULL
-     *
-     * //in un loop infinito devono :
-     *
-     * -mangiare
-     *      (check sulle forks)
-     *      (sleep_di(time_to_eat)time)
-     *      (stampa X sta mangiando)
-     * -pensare
-     *      (sleep_di(time_to_think)time)
-     *      (stampa X sta pensando)
-     * -dormire
-     *      (sleep_di(time_to_sleep)time)
-     *      (stampa X sta dormendo)
-     *
-     */
+
 int main(int argc, char **argv)
 {
-    t_room *tab;
-    int i;
-    
-    tab = ft_calloc(1, sizeof(t_room));
-    i = -1;
-    if (check_valid_args(argv, argc) != 1 || ft_init_room(tab, argc, argv) != 1) {
-        return (1);
-    }
-    while (++i < tab->n_philos)
-    {
-        tab->philos[i].creation_time = tab->start_time - ft_get_time_msec();
-        pthread_create(&tab->pthread_id[i], NULL, &philoroutine, &(*(tab->philos + i)));
-    }
-    i = -1;
-    while(++i < tab->n_philos)
-        pthread_join(tab->pthread_id[i], NULL);
-    return (0);
+	t_room *tab;
+	int i;
+	
+	tab = ft_calloc(1, sizeof(t_room));
+	i = -1;
+	if (check_valid_args(argv, argc) != 1 || ft_init_room(tab, argc, argv) != 1) {
+		return (1);
+	}
+	while (++i < tab->n_philos)
+	{
+		tab->philos[i].creation_time = tab->start_time - ft_get_time_msec();
+		pthread_create(&tab->pthread_id[i], NULL, &philoroutine, &(*(tab->philos + i)));
+	}
+/* 	bigbro();
+ */	i = -1;
+	while(++i < tab->n_philos)
+		pthread_join(tab->pthread_id[i], NULL);
+	return (0);
 }
