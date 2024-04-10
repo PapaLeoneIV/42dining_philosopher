@@ -1,13 +1,7 @@
-
-
-christian()
+function christian()
 {
     var numero = "stringa";
     console.log(numero);
-}
-
-
-
-
+};
 
 christian();

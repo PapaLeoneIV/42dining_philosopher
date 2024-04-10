@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:11 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/08 14:52:07 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/10 12:24:39 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_philo
     long int end_sleep;
     
     pthread_mutex_t lock;
+    pthread_mutex_t alive;
 
     pthread_mutex_t *lfork;
     pthread_mutex_t *rfork;
@@ -72,6 +73,7 @@ typedef struct s_stanza //contiene le regole del gioco e tutte le info del tavol
     int time_to_eat;
     int time_to_sleep;
     int time_must_eat;
+    int continuee;
 
     long int start_time;
     t_philo *philos;

@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/08 17:21:16 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/10 12:26:51 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static void ft_send_message(t_philo *philo, int flag)
 {
 	pthread_mutex_lock(&philo->stanza->stampa);
 	long timestamp = ft_get_time_msec() - philo->stanza->start_time;
+	pthread_mutex_lock(&philo->alive);
 	if (philo->is_alive)
 	{
 		if (flag == FORKS)
@@ -30,16 +31,16 @@ static void ft_send_message(t_philo *philo, int flag)
 		else if (flag == EAT)
 			printf("%ld %i \033[35mis eating\n\033[0m\n",  timestamp, philo->id);
 	}
+	pthread_mutex_unlock(&philo->alive);
 	pthread_mutex_unlock(&philo->stanza->stampa);
 }
 
 void ft_take_forks(t_philo *philo)
 {
-		pthread_mutex_lock(philo->rfork);
-		ft_send_message(philo, FORKS);
-		pthread_mutex_lock(philo->lfork);
-		ft_send_message(philo, FORKS);
-
+	pthread_mutex_lock(philo->rfork);
+	ft_send_message(philo, FORKS);
+	pthread_mutex_lock(philo->lfork);
+	ft_send_message(philo, FORKS);
 }
 
 void ft_is_eating(t_philo *philo)
@@ -56,10 +57,36 @@ void ft_is_eating(t_philo *philo)
 	pthread_mutex_unlock(&philo->lock);
 }
 
+
+int check_death(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->lock);
+	if (philo->is_alive == 0)
+	{
+		philo->stanza->continuee = 0;
+		pthread_mutex_unlock(&philo->lock);
+		return (0);
+	}
+	pthread_mutex_unlock(&philo->lock);
+	return (1);
+}
+
+int check_continue(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->lock);
+	if (philo->stanza->continuee == 0)		
+	{
+		pthread_mutex_unlock(&philo->lock);
+		return (0);	
+	}
+	pthread_mutex_unlock(&philo->lock);
+	return (1);
+}
+
 void *philoroutine(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
-	while(philo->is_alive && philo->time_must_eat != 0)
+	while(check_death(philo) && check_continue(philo) && philo->time_must_eat != 0)
 	{
 		ft_is_eating(philo);
 		ft_send_message(philo, SLEEP);
@@ -67,40 +94,34 @@ void *philoroutine(void *arg)
 		ft_send_message(philo, THINK);
 		philo->time_must_eat--;
 	}
+		
 	return (NULL);
 }
 
-int check_death(t_room *stanza)
+int bigbro(t_room *room)
 {
 	int i;
-
-	i = 0;
 	
-	while(i < stanza->n_philos)
+	while (1)
 	{
-		
-		if(stanza->philos[i].end_eat - stanza->philos[i].start_eat > stanza->philos[i].time_to_die)
+		i = -1;
+		while (++i < room->n_philos)
 		{
-			/**stampa la morte del filosofo*/
-			ft_send_message(&stanza->philos[i], DIED);
-			/**interrmpi esecuzione*/
-			return (0);
+			pthread_mutex_lock(&room->philos[i].lock);
+			if (ft_get_time_msec() - room->philos[i].end_eat > room->time_to_die)
+			{
+				ft_send_message(&room->philos[i], DIED);
+				pthread_mutex_lock(&room->philos[i].alive);
+				room->philos[i].is_alive = 0;
+				pthread_mutex_unlock(&room->philos[i].alive);
+				pthread_mutex_unlock(&room->philos[i].lock);
+				return (1);
+			}
+			pthread_mutex_unlock(&room->philos[i].lock);
 		}
-		i++;
+		usleep(1000);
 	}
-	return (1);
 }
-/* 
-void bigbrother(t_room * room)
-{
-	pthread_mutex_lock(&room->stampa);
-	if (check_death(room) == 0)
-	{
-		pthread_mutex_unlock(&room->stampa);	
-		return;
-	}
-	pthread_mutex_unlock(&room->stampa);
-} */
 
 int main(int argc, char **argv)
 {
@@ -117,8 +138,9 @@ int main(int argc, char **argv)
 		tab->philos[i].creation_time = tab->start_time - ft_get_time_msec();
 		pthread_create(&tab->pthread_id[i], NULL, &philoroutine, &(*(tab->philos + i)));
 	}
-/* 	bigbro();
- */	i = -1;
+	i = -1;
+	bigbro(tab);
+	i = -1;
 	while(++i < tab->n_philos)
 		pthread_join(tab->pthread_id[i], NULL);
 	return (0);

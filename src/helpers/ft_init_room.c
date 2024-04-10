@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 10:27:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/08 14:51:46 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/10 12:24:51 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static int prepare_philos(t_room *room)
         room->philos[i].stanza = room;
         ft_assign_forks(room, &room->philos[i]);     
         pthread_mutex_init(&room->philos[i].lock, NULL);
+        pthread_mutex_init(&room->philos[i].alive, NULL);
+        
         
     }
     return (1);
@@ -70,6 +72,7 @@ static int address_dining_room(t_room *room, int argc, char **argv)
     room->time_to_eat = ft_atoi(argv[3]);
     room->time_to_sleep = ft_atoi(argv[4]);
     room->pthread_id = ft_calloc(room->n_philos, sizeof(pthread_t));
+    room->continuee = 1;
     if (argc == 6)
         room->time_must_eat = ft_atoi(argv[5]);
     else                                                //controllo sul 5' argomento
