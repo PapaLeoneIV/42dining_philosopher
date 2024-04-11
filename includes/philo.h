@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:11 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/10 12:24:39 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/11 16:46:59 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,12 @@ typedef struct s_philo
     int time_to_eat;
     int time_to_sleep;
     int time_must_eat;
-    
-    long int creation_time;
     long int start_eat;
     long int end_eat;
-    long int start_sleep;
-    long int end_sleep;
-    
-    pthread_mutex_t lock;
-    pthread_mutex_t alive;
-
+    pthread_mutex_t mmust_eat;
+    pthread_mutex_t mend_eat;
     pthread_mutex_t *lfork;
     pthread_mutex_t *rfork;
-
     t_stanza *stanza;
 } t_philo;
 
@@ -73,16 +66,15 @@ typedef struct s_stanza //contiene le regole del gioco e tutte le info del tavol
     int time_to_eat;
     int time_to_sleep;
     int time_must_eat;
-    int continuee;
-
     long int start_time;
+    int continuee;
     t_philo *philos;
     t_waiter waiter;       //he is going to be the observer of the dinner;
     
     pthread_t *pthread_id;
     pthread_t wthread_id;
     pthread_mutex_t stampa;
-    pthread_mutex_t bigb;
+    pthread_mutex_t continuee_mutex;
     pthread_mutex_t* forks;
     
 } t_room;

@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 10:27:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/10 12:24:51 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/11 16:47:03 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,10 @@ static int prepare_philos(t_room *room)
         room->philos[i].time_must_eat = room->time_must_eat;
         room->philos[i].n_philos_tot = room->n_philos;
         room->philos[i].stanza = room;
-        ft_assign_forks(room, &room->philos[i]);     
-        pthread_mutex_init(&room->philos[i].lock, NULL);
-        pthread_mutex_init(&room->philos[i].alive, NULL);
-        
-        
+        room->philos[i].end_eat = ft_get_time_msec();
+        ft_assign_forks(room, &room->philos[i]);
+        pthread_mutex_init(&room->philos[i].mend_eat, NULL);
+        pthread_mutex_init(&room->philos[i].mmust_eat, NULL);
     }
     return (1);
 }
@@ -71,8 +70,9 @@ static int address_dining_room(t_room *room, int argc, char **argv)
     room->time_to_die = ft_atoi(argv[2]);
     room->time_to_eat = ft_atoi(argv[3]);
     room->time_to_sleep = ft_atoi(argv[4]);
-    room->pthread_id = ft_calloc(room->n_philos, sizeof(pthread_t));
     room->continuee = 1;
+    room->start_time = ft_get_time_msec();
+    room->pthread_id = ft_calloc(room->n_philos, sizeof(pthread_t));
     if (argc == 6)
         room->time_must_eat = ft_atoi(argv[5]);
     else                                                //controllo sul 5' argomento
@@ -81,17 +81,7 @@ static int address_dining_room(t_room *room, int argc, char **argv)
     while(++i < room->n_philos)
         pthread_mutex_init(&(room->forks[i]), NULL);
     pthread_mutex_init(&room->stampa, NULL);
-    pthread_mutex_init(&room->bigb, NULL);
-    room->start_time = ft_get_time_msec();
-    return (1);
-}
-static int hire_waiter(t_room *room)
-{
-    room->waiter = (t_waiter){0};
-    room->waiter.philos_alive = 1; 
-    room->waiter.start_time = ft_get_time_msec();
-    if (!room->waiter.start_time)
-        return (0);
+    pthread_mutex_init(&room->continuee_mutex, NULL);
     return (1);
 }
 
@@ -101,8 +91,6 @@ int ft_init_room(t_room *room, int argc, char **argv)
     if (check_valid_args(argv, argc) == 0)
         error_fn(INITIALIZATION_ERROR);
     if (address_dining_room(room, argc, argv) == 0)
-        error_fn(INITIALIZATION_ERROR);
-    if (hire_waiter(room) == 0)
         error_fn(INITIALIZATION_ERROR);
     if (prepare_philos(room) == 0)
         error_fn(INITIALIZATION_ERROR);
