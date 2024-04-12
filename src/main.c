@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/11 16:54:04 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/12 19:16:19 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,22 @@ static void ft_send_message(t_philo *philo, int flag)
 
 void ft_take_forks(t_philo *philo)
 {
-	pthread_mutex_lock(philo->rfork);
-	ft_send_message(philo, FORKS);
-	pthread_mutex_lock(philo->lfork);
-	ft_send_message(philo, FORKS);
+/* 	if (philo->id == philo->stanza->n_philos)
+	{ */
+		pthread_mutex_lock(philo->rfork);
+		ft_send_message(philo, FORKS);
+		pthread_mutex_lock(philo->lfork);
+		ft_send_message(philo, FORKS);
+/* 	}
+	else
+	{
+		pthread_mutex_lock(philo->lfork);
+		ft_send_message(philo, FORKS);
+		pthread_mutex_lock(philo->rfork);
+		ft_send_message(philo, FORKS);	
+	} */
 }
+
 
 void ft_is_eating(t_philo *philo)
 {
@@ -78,6 +89,10 @@ void *philoroutine(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
 	int must_eat;
+	if (philo->id % 2)
+		usleep(100);
+	if (philo->id % philo->stanza->n_philos && philo->id != 0)
+		usleep(200);
 	pthread_mutex_lock(&philo->mmust_eat);
 	must_eat = philo->time_must_eat;
 	pthread_mutex_unlock(&philo->mmust_eat);
@@ -133,7 +148,6 @@ int main(int argc, char **argv)
 		pthread_create(&tab->pthread_id[i], NULL, &philoroutine, &(*(tab->philos + i)));		
 		if(i == tab->n_philos - 1)
 			pthread_create(&tab->wthread_id, NULL, &bigbro, tab);				
-		usleep(100);
 	}
 	i = -1;
 	while(++i < tab->n_philos)
