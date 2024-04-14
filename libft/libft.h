@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 22:53:01 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/04 14:07:51 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/14 13:35:38 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,7 @@ typedef enum e_state
  * @return returns after sleep_time milliseconds
  */
 
-void    custom_sleep(long int sleep_time);
-
+void					custom_sleep(long int sleep_time);
 
 /**
  * @brief function used to return the current time in milliseconds
@@ -92,7 +91,7 @@ void    custom_sleep(long int sleep_time);
  * @return -1 if there was an error, or the current time in milliseconds, 
  * 			in a long data type;
  */
-long ft_get_time_msec(void);
+long					ft_get_time_msec(void);
 
 /**
  * @brief Counts the columns of a given matrix.

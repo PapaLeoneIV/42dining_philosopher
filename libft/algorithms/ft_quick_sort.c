@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quick_sort.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <riccardo.leone@student.42fir      +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/02 15:23:17 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/14 13:38:35 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../libft.h"
 

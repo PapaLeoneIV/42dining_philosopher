@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_arri.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <riccardo.leone@student.42fir      +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/02 15:23:18 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/14 13:38:06 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "ft_printf.h"
 #include "libft.h"
