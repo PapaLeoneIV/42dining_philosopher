@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/12 19:16:19 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/14 12:37:02 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,21 @@ static void ft_send_message(t_philo *philo, int flag)
 
 void ft_take_forks(t_philo *philo)
 {
-/* 	if (philo->id == philo->stanza->n_philos)
-	{ */
-		pthread_mutex_lock(philo->rfork);
-		ft_send_message(philo, FORKS);
-		pthread_mutex_lock(philo->lfork);
-		ft_send_message(philo, FORKS);
-/* 	}
-	else
+	if (philo->id == philo->stanza->n_philos)
 	{
 		pthread_mutex_lock(philo->lfork);
 		ft_send_message(philo, FORKS);
 		pthread_mutex_lock(philo->rfork);
 		ft_send_message(philo, FORKS);	
-	} */
+	}
+	else
+{
+		pthread_mutex_lock(philo->rfork);
+		ft_send_message(philo, FORKS);
+		pthread_mutex_lock(philo->lfork);
+		ft_send_message(philo, FORKS);
+	}
 }
-
 
 void ft_is_eating(t_philo *philo)
 {
@@ -90,9 +89,9 @@ void *philoroutine(void *arg)
 	t_philo *philo = (t_philo *)arg;
 	int must_eat;
 	if (philo->id % 2)
-		usleep(100);
-	if (philo->id % philo->stanza->n_philos && philo->id != 0)
-		usleep(200);
+		usleep(1000);
+	if (philo->id % philo->stanza->n_philos && philo->id != 0) 
+		usleep(2000);
 	pthread_mutex_lock(&philo->mmust_eat);
 	must_eat = philo->time_must_eat;
 	pthread_mutex_unlock(&philo->mmust_eat);
@@ -133,6 +132,16 @@ void *bigbro(void *room)
 	}
 }
 
+void *lonelyboyroutine(void *arg)
+{
+	t_philo *philo = (t_philo *)arg;
+	ft_send_message(philo, FORKS);
+	custom_sleep(philo->time_to_sleep);
+	ft_send_message(philo, DIED);
+
+	pthread_exit(NULL);
+}
+
 int main(int argc, char **argv)
 {
 	t_room *tab;
@@ -143,11 +152,16 @@ int main(int argc, char **argv)
 	if (check_valid_args(argv, argc) != 1 || ft_init_room(tab, argc, argv) != 1) {
 		return (1);
 	}
-	while (++i < tab->n_philos)
+	if (tab->n_philos == 1)
+		pthread_create(&tab->pthread_id[0], NULL, &lonelyboyroutine, &(*(tab->philos)));
+	else
 	{
-		pthread_create(&tab->pthread_id[i], NULL, &philoroutine, &(*(tab->philos + i)));		
-		if(i == tab->n_philos - 1)
-			pthread_create(&tab->wthread_id, NULL, &bigbro, tab);				
+		while (++i < tab->n_philos)
+		{
+			pthread_create(&tab->pthread_id[i], NULL, &philoroutine, &(*(tab->philos + i)));		
+			if(i == tab->n_philos - 1)
+				pthread_create(&tab->wthread_id, NULL, &bigbro, tab);				
+		}	
 	}
 	i = -1;
 	while(++i < tab->n_philos)
