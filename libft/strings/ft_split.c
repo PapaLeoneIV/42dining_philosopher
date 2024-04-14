@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rileone <riccardo.leone@student.42fir      +#+  +:+       +#+        */
+/*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 15:23:13 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/02 15:23:18 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/14 14:37:56 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "libft.h"
 
@@ -77,8 +76,6 @@ char	**ft_split(char const *s, char c)
 	if (!len)
 		return (NULL);
 	res = (char **)ft_calloc((len + 1), sizeof(char *));
-	if (!res)
-		return (NULL);
 	while (j < len)
 	{
 		while (s[i] == c && s[i] != '\0')
