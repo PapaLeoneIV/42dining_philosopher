@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 17:06:08 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/14 13:26:44 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/19 15:16:04 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ void	ft_send_message(t_philo *ph, int flag)
 	{
 		time = ft_get_time_msec() - ph->stanza->start_time;
 		if (flag == FORKS)
-			ft_printf("%ld %i \033[32mhas taken a fork\033[0m\n", time, ph->id);
+			printf("%ld %i \033[32mhas taken a fork\033[0m\n", time, ph->id);
 		else if (flag == DIED)
-			ft_printf("\033 [%ld %i died\033[0m\n", time, ph->id);
+			printf("\033 [%ld %i died\033[0m\n", time, ph->id);
 		else if (flag == SLEEP)
-			ft_printf("%ld %i \033[34mis sleeping\033[0m\n", time, ph->id);
+			printf("%ld %i \033[34mis sleeping\033[0m\n", time, ph->id);
 		else if (flag == THINK)
-			ft_printf("%ld %i is thinking\033[0m\n", time, ph->id);
+			printf("%ld %i is thinking\033[0m\n", time, ph->id);
 		else if (flag == EAT)
-			ft_printf("%ld %i \033[35mis eating\n\033[0m\n", time, ph->id);
+			printf("%ld %i \033[35mis eating\n\033[0m\n", time, ph->id);
 	}
 	pthread_mutex_unlock(&ph->stanza->stampa);
 }

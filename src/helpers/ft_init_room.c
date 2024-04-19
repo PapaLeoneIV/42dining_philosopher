@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 10:27:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/14 13:35:03 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/14 16:01:38 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	prepare_philos(t_room *room)
 		room->philos[i].time_must_eat = room->time_must_eat;
 		room->philos[i].n_philos_tot = room->n_philos;
 		room->philos[i].stanza = room;
+		room->philos[i].must_eat = room->time_must_eat;
 		room->philos[i].end_eat = ft_get_time_msec();
 		ft_assign_forks(room, &room->philos[i]);
 		pthread_mutex_init(&room->philos[i].mend_eat, NULL);

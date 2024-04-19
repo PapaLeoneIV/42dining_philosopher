@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:11 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/14 13:23:20 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/14 15:55:40 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_philo
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					time_must_eat;
+	int					must_eat;
 	long int			start_eat;
 	long int			end_eat;
 	pthread_mutex_t		mmust_eat;
@@ -59,21 +60,21 @@ typedef struct s_philo
 
 typedef struct s_stanza
 {
-	int					n_philos;
-	int					counter;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
-	int					time_must_eat;
-	long int			start_time;
-	int					continuee;
 	t_philo				*philos;
 	t_waiter			waiter;
+	int					n_philos;
+	int					counter;
+	int					time_to_sleep;
+	int					time_to_die;
+	int					time_to_eat;
+	int					time_must_eat;
+	int					continuee;
+	long int			start_time;
 	pthread_t			*t_id;
 	pthread_t			wthread_id;
-	pthread_mutex_t		stampa;
-	pthread_mutex_t		continuee_mutex;
 	pthread_mutex_t		*forks;
+	pthread_mutex_t		continuee_mutex;
+	pthread_mutex_t		stampa;
 }	t_room;
 
 int		ft_init_room(t_room *var, int argc, char **argv);
