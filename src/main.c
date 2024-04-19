@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 15:17:17 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/19 15:15:05 by rileone          ###   ########.fr       */
+/*   Updated: 2024/04/19 15:22:48 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	*philor(void *arg)
 	pthread_exit(NULL);
 }
 
-void	*bigbro(void *room)
+void	*waiterr(void *room)
 {
 	t_room		*stanza;
 	long int	diff;
@@ -131,11 +131,12 @@ int	main(int argc, char **argv)
 		while (++i < tab->n_philos)
 		{
 			pthread_create(&tab->t_id[i], NULL, &philor, &(*(tab->philos + i)));
-			if (i == tab->n_philos - 1)
-				pthread_create(&tab->wthread_id, NULL, &bigbro, tab);
+			if ((i == tab->n_philos - 1) && tab->n_philos > 1)
+				pthread_create(&tab->wthread_id, NULL, &waiterr, tab);
 		}
 	}
-	pthread_join(tab->wthread_id, NULL);
+	if(tab->n_philos > 1)
+		pthread_join(tab->wthread_id, NULL);
 	i = -1;
 	while (++i < tab->n_philos)
 		pthread_join(tab->t_id[i], NULL);
