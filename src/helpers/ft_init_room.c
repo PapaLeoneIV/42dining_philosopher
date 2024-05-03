@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 10:27:28 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/14 16:01:38 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/03 12:56:25 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,25 @@ int	prepare_philos(t_room *room)
 	int	i;
 
 	i = -1;
-	room->philos = ft_calloc(room->n_philos, sizeof(t_philo));
-	if (!room->philos)
+	room->p = ft_calloc(room->n_philos, sizeof(t_philo));
+	if (!room->p)
 		return (0);
 	while (++i < room->n_philos)
 	{
-		room->philos[i] = (t_philo){0};
-		room->philos[i].id = i + 1;
-		room->philos[i].is_alive = 1;
-		room->philos[i].time_to_die = room->time_to_die;
-		room->philos[i].time_to_eat = room->time_to_eat;
-		room->philos[i].time_to_sleep = room->time_to_sleep;
-		room->philos[i].time_must_eat = room->time_must_eat;
-		room->philos[i].n_philos_tot = room->n_philos;
-		room->philos[i].stanza = room;
-		room->philos[i].must_eat = room->time_must_eat;
-		room->philos[i].end_eat = ft_get_time_msec();
-		ft_assign_forks(room, &room->philos[i]);
-		pthread_mutex_init(&room->philos[i].mend_eat, NULL);
-		pthread_mutex_init(&room->philos[i].mmust_eat, NULL);
+		room->p[i] = (t_philo){0};
+		room->p[i].id = i + 1;
+		room->p[i].is_alive = 1;
+		room->p[i].time_to_die = room->time_to_die;
+		room->p[i].time_to_eat = room->time_to_eat;
+		room->p[i].time_to_sleep = room->time_to_sleep;
+		room->p[i].time_must_eat = room->time_must_eat;
+		room->p[i].n_philos_tot = room->n_philos;
+		room->p[i].stanza = room;
+		room->p[i].must_eat = room->time_must_eat;
+		room->p[i].end_eat = ft_get_time_msec();
+		ft_assign_forks(room, &room->p[i]);
+		pthread_mutex_init(&room->p[i].mend_eat, NULL);
+		pthread_mutex_init(&room->p[i].mmust_eat, NULL);
 	}
 	return (1);
 }
@@ -68,7 +68,7 @@ static int	address_dining_room(t_room *room, int argc, char **argv)
 	room->time_to_die = ft_atoi(argv[2]);
 	room->time_to_eat = ft_atoi(argv[3]);
 	room->time_to_sleep = ft_atoi(argv[4]);
-	room->continuee = 1;
+	room->cont = 1;
 	room->start_time = ft_get_time_msec();
 	room->t_id = ft_calloc(room->n_philos, sizeof(pthread_t));
 	if (argc == 6)
@@ -79,7 +79,7 @@ static int	address_dining_room(t_room *room, int argc, char **argv)
 	while (++i < room->n_philos)
 		pthread_mutex_init(&(room->forks[i]), NULL);
 	pthread_mutex_init(&room->stampa, NULL);
-	pthread_mutex_init(&room->continuee_mutex, NULL);
+	pthread_mutex_init(&room->cmutex, NULL);
 	return (1);
 }
 

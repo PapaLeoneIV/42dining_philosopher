@@ -6,7 +6,7 @@
 /*   By: rileone <rileone@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 17:06:08 by rileone           #+#    #+#             */
-/*   Updated: 2024/04/19 15:16:04 by rileone          ###   ########.fr       */
+/*   Updated: 2024/05/03 12:58:03 by rileone          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	ft_send_message(t_philo *ph, int flag)
 	int		continuee;
 	long	time;
 
-	pthread_mutex_lock(&ph->stanza->continuee_mutex);
-	continuee = ph->stanza->continuee;
-	pthread_mutex_unlock(&ph->stanza->continuee_mutex);
+	pthread_mutex_lock(&ph->stanza->cmutex);
+	continuee = ph->stanza->cont;
+	pthread_mutex_unlock(&ph->stanza->cmutex);
 	pthread_mutex_lock(&ph->stanza->stampa);
 	if (continuee)
 	{
@@ -89,9 +89,9 @@ int	check_status(t_philo *philo)
 	int	status;
 	int	i;
 
-	pthread_mutex_lock(&philo->stanza->continuee_mutex);
-	i = philo->stanza->continuee;
-	pthread_mutex_unlock(&philo->stanza->continuee_mutex);
+	pthread_mutex_lock(&philo->stanza->cmutex);
+	i = philo->stanza->cont;
+	pthread_mutex_unlock(&philo->stanza->cmutex);
 	status = 1;
 	if (i == 0)
 		status = 0;
