@@ -12,6 +12,12 @@ The Dining Philosophers Problem involves a certain number of philosophers, each 
 - Make (optional)
 
 ### Compilation
-To compile the program, run the following command in your terminal
-'''bash
-Makefile
+To compile the program, run the following command in your terminal:
+```bash
+ make
+```
+###Execution
+To execute the program, run the following command in your terminal
+```bash
+./philo time_to_die time_to_eat time_to_sleep [num_of_time_they_must_eat(optional)]
+```
